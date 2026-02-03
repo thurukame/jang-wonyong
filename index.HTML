@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Be Like K-Idol</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #fbd3e9, #bb377d);
+  text-align: center;
+  padding: 30px;
+}
+h1 { color: white; }
+.container {
+  background: white;
+  max-width: 480px;
+  margin: auto;
+  padding: 25px;
+  border-radius: 15px;
+}
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+button {
+  background: #bb377d;
+  color: white;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.question {
+  text-align: left;
+  margin-top: 15px;
+}
+.result {
+  margin-top: 25px;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+}
+.idol {
+  color: #bb377d;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+<h1>Be Like K-Idol 💫</h1>
+
+<div class="container">
+
+<label>身長（cm）</label>
+<input type="number" id="height">
+
+<label>体重（kg）</label>
+<input type="number" id="weight">
+
+<h3>骨格診断（当てはまるものにチェック）</h3>
+
+<div class="question"><input type="checkbox" value="ラブリー"> 骨や関節が小さく、全体的に華奢</div>
+<div class="question"><input type="checkbox" value="カジュアル"> 肩幅があり、骨感が目立つ</div>
+<div class="question"><input type="checkbox" value="ハイファッション"> 手足が長く、モデル体型と言われる</div>
+<div class="question"><input type="checkbox" value="ロマンティック"> バスト・ヒップに丸みが出やすい</div>
+<div class="question"><input type="checkbox" value="クラシック"> 体のバランスが均等で上品</div>
+<div class="question"><input type="checkbox" value="ドラマティック"> 骨格がしっかりしていて存在感がある</div>
+<div class="question"><input type="checkbox" value="ソフトクラシック"> 全体的に柔らかく、きれいめ</div>
+
+<button onclick="diagnose()">診断する</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<script>
+function diagnose() {
+  const height = document.getElementById("height").value / 100;
+  const weight = document.getElementById("weight").value;
+
+  if (!height || !weight) {
+    alert("身長と体重を入力してね！");
+    return;
+  }
+
+  // BMI計算
+  const bmi = (weight / (height * height)).toFixed(1);
+  let bmiResult = "";
+  if (bmi < 18.5) bmiResult = "やや痩せ型";
+  else if (bmi < 22) bmiResult = "理想的で健康的✨";
+  else if (bmi < 24) bmiResult = "標準";
+  else bmiResult = "健康的に引き締めゾーン";
+
+  // 骨格診断
+  const scores = {
+    "ラブリー": 0,
+    "カジュアル": 0,
+    "ハイファッション": 0,
+    "ロマンティック": 0,
+    "クラシック": 0,
+    "ドラマティック": 0,
+    "ソフトクラシック": 0
+  };
+
+  document.querySelectorAll("input[type=checkbox]:checked")
+    .forEach(cb => scores[cb.value]++);
+
+  let bodyType = Object.keys(scores)
+    .reduce((a, b) => scores[a] > scores[b] ? a : b);
+
+  const idols = {
+    "ラブリー": ["BLACKPINK ロゼ", "LESSERAFIM チェウォン"],
+    "カジュアル": ["TWICE ミナ", "LESSERAFIM カズハ"],
+    "ハイファッション": ["BLACKPINK リサ", "NewJeans ヘイン"],
+    "ロマンティック": ["NewJeans ハニ", "IVE レイ"],
+    "クラシック": ["TWICE モモ", "aespa ニンニン"],
+    "ドラマティック": ["aespa ジゼル", "BLACKPINK ジス"],
+    "ソフトクラシック": ["TWICE ナヨン", "IVE ガウル"]
+  };
+
+  let idolHTML = "";
+  idols[bodyType].forEach(idol => {
+    idolHTML += `<div class="idol">🌟 ${idol}</div>`;
+  });
+
+  document.getElementById("result").innerHTML = `
+    <h3>診断結果</h3>
+    <p><strong>BMI：</strong>${bmi}</p>
+    <p><strong>体型評価：</strong>${bmiResult}</p>
+    <p><strong>骨格タイプ：</strong>${bodyType}</p>
+    <p><strong>目指すK-popアイドル：</strong></p>
+    ${idolHTML}
+    <p>無理せず健康的に、自分らしいK-idol体型を目指そう💖</p>
+  `;
+}
+</script>
+
+</body>
+</html>
